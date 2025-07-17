@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Portfolio with Visitor Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .counter-box {
+      background-color: white;
+      padding: 20px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      font-size: 1.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="counter-box">
+    👁️ Visitors: <span id="visit-count">Loading...</span>
+  </div>
+
+  <script>
+    const namespace = "jishnujp";         // change this to something unique
+    const key = "portfolio";              // change if you want to track multiple pages
+    const updateUrl = `https://api.countapi.xyz/update/${namespace}/${key}/?amount=1`;
+    const getUrl = `https://api.countapi.xyz/get/${namespace}/${key}`;
+
+    // Optional: prevent multiple counts from the same user using localStorage
+    if (!localStorage.getItem("hasVisited")) {
+      fetch(updateUrl)
+        .then(() => localStorage.setItem("hasVisited", true));
+    }
+
+    // Always show the latest count
+    fetch(getUrl)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("visit-count").innerText = data.value;
+      })
+      .catch(() => {
+        document.getElementById("visit-count").innerText = "N/A";
+      });
+  </script>
+
+</body>
+</html>
